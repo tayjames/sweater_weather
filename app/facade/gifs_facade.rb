@@ -1,6 +1,9 @@
 class GifsFacade
+  attr_reader :location, :id
+
   def initialize(location) #should i be initializing with weather instead?
     @location = location
+    @id = 1
   end
 
   def gif
@@ -35,21 +38,20 @@ class GifsFacade
     end
 
     #iterate over five day summary var to create 5 gif(?) objects
-    #
-    gifs = five_day_summary.map do |summary|
-      giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|
-      f.params["api_key"] = ENV["GIPHY_API_KEY"]
-      f.params["q"] = summary
-      f.adapter Faraday.default_adapter
+      gifs = five_day_summary.map do |summary|
+        giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|
+        f.params["api_key"] = ENV["GIPHY_API_KEY"]
+        f.params["q"] = summary
+        f.adapter Faraday.default_adapter
+      end
+      giphy_response = giphy_conn.get("/v1/gifs/search")
+      giphy_data = JSON.parse(giphy_response.body, symbolize_names: true)
     end
-    giphy_response = giphy_conn.get("/v1/gifs/search")
-  end
-  binding.pry
-
-    giphy_data = JSON.parse(giphy_response.body, symbolize_names: true)
   end
 
-  def method_name
-
+  def daily_gif
+    get_gif(location).map do |gif|
+      ForecastGif.new(gif)
+    end
   end
 end
