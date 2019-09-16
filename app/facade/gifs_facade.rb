@@ -37,6 +37,11 @@ class GifsFacade
       day.summary
     end
 
+    five_day_time = five_day_forecast.map do |day|
+      day.daily_time
+    end
+    
+    binding.pry
     #iterate over five day summary var to create 5 gif(?) objects
       gifs = five_day_summary.map do |summary|
         giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|

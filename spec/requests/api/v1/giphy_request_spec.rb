@@ -6,7 +6,7 @@ RSpec.describe "Returns a gif" do
 
     expect(response).to be_successful
     gif_data = JSON.parse(response.body, symbolize_names: true)
+    # binding.pry
 
-    
   end
 end
