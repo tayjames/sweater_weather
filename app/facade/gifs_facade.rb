@@ -34,17 +34,22 @@ class GifsFacade
       day.summary
     end
 
-
-
-    giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|
+    #iterate over five day summary var to create 5 gif(?) objects
+    #
+    gifs = five_day_summary.map do |summary|
+      giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|
       f.params["api_key"] = ENV["GIPHY_API_KEY"]
-      f.params["q"] = five_day_summary[0]
+      f.params["q"] = summary
       f.adapter Faraday.default_adapter
     end
-
     giphy_response = giphy_conn.get("/v1/gifs/search")
-    binding.pry
+  end
+  binding.pry
 
-    JSON.parse(giphy_response.body, symbolize_names: true)
+    giphy_data = JSON.parse(giphy_response.body, symbolize_names: true)
+  end
+
+  def method_name
+
   end
 end
