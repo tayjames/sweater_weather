@@ -35,15 +35,15 @@ class GifsFacade
     end
 
 
-    binding.pry
 
-    giphy_conn = Faraday.new(url: "https://api.giphy.com/v1/gifs/search") do |f|
+    giphy_conn = Faraday.new(url: "https://api.giphy.com") do |f|
       f.params["api_key"] = ENV["GIPHY_API_KEY"]
-      f.params["q"] = #???
+      f.params["q"] = five_day_summary[0]
       f.adapter Faraday.default_adapter
     end
 
-    # giphy_response = giphy_conn.get("?location=#{@location}")
+    giphy_response = giphy_conn.get("/v1/gifs/search")
+    binding.pry
 
     JSON.parse(giphy_response.body, symbolize_names: true)
   end
