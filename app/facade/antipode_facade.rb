@@ -11,15 +11,20 @@ class AntipodeFacade
   end
 
   def get_antipode(location)
-    google_conn = Faraday.new(url: "https://maps.googleapis.com/maps/api/geocode/json?") do |f|
-      f.adapter Faraday.default_adapter
-    end
 
-    google_response = google_conn.get("?address=#{@location}&key=#{ENV['API_KEY']}")
-
-    coordinate_data = JSON.parse(google_response.body, symbolize_names: true)[:results]
-    latitude = coordinate_data[0][:geometry][:location][:lat]
-    longitude = coordinate_data[0][:geometry][:location][:lng]
+    service = GoogleService.new
+    x = service.coordinates_by_location(location)
+    y = Coordinate.new(x)
+      binding.pry
+    # google_conn = Faraday.new(url: "https://maps.googleapis.com/maps/api/geocode/json?") do |f|
+    #   f.adapter Faraday.default_adapter
+    # end
+    #
+    # google_response = google_conn.get("?address=#{@location}&key=#{ENV['API_KEY']}")
+    #
+    # coordinate_data = JSON.parse(google_response.body, symbolize_names: true)[:results]
+    # latitude = coordinate_data[0][:geometry][:location][:lat]
+    # longitude = coordinate_data[0][:geometry][:location][:lng]
 
     amypode_conn = Faraday.new(url: "http://amypode.herokuapp.com") do |f|
       f.headers["api_key"] = ENV['AMY_API_KEY']
