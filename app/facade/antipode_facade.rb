@@ -1,6 +1,6 @@
 class AntipodeFacade
   attr_reader :location, :id
-  
+
   def initialize(location)
     @location = location
     @id = 1
@@ -49,6 +49,6 @@ class AntipodeFacade
   end
 
   def antipode_forecast
-    AntipodeForecast.new(get_antipode(location))
+    AntipodeForecast.new(get_antipode(location), @location)
   end
 end
