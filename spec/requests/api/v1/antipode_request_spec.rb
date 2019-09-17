@@ -8,10 +8,9 @@ RSpec.describe "Returns a forecast for the antipode of a location" do
     forecast_data = JSON.parse(response.body, symbolize_names: true)
     # binding.pry
 
-    # expect(response.content_type).to eq("application/json")
-    # expect(forecast_data.class).to eq(Hash)
-    # expect(forecast_data[:data][:attributes].class).to eq(Hash)
-    # expect(forecast_data[:data][:attributes].keys).to eq([:current_forecast, :daily_forecast, :hourly_forecast])
+    expect(response.content_type).to eq("application/json")
+    expect(forecast_data.class).to eq(Hash)
+    expect(forecast_data[:data][:attributes][:antipode_forecast].keys).to eq([:ciudad, :temperatura, :sumario])
     # expect(forecast_data[:data][:attributes][:current_forecast].keys).to eq([:icon, :temperature, :feels_like, :humidity, :visibility, :uv_index, :summary])
     # expect(forecast_data[:data][:attributes][:daily_forecast].count).to eq(5)
     # expect(forecast_data[:data][:attributes][:daily_forecast][0].keys).to eq([:high, :low, :summary, :precipitation])
