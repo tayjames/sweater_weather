@@ -1,4 +1,4 @@
 class AntipodeSerializer
   include FastJsonapi::ObjectSerializer
-  attributes :
+  attributes :antipode_forecast
 end
