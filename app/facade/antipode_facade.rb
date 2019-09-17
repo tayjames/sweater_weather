@@ -1,4 +1,6 @@
 class AntipodeFacade
+  attr_reader :location, :id
+  
   def initialize(location)
     @location = location
     @id = 1
@@ -44,6 +46,9 @@ class AntipodeFacade
 
     darksky_response = darksky_conn.get("/forecast/#{ENV['DS_KEY']}/#{reverse_lat},#{reverse_long}")
     forecast_data = JSON.parse(darksky_response.body, symbolize_names: true)
-    binding.pry
+  end
+
+  def antipode_forecast
+    AntipodeForecast.new(get_antipode(location))
   end
 end
