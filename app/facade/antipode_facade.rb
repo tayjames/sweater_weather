@@ -11,39 +11,17 @@ class AntipodeFacade
   end
 
   def get_antipode(location)
-    service = GoogleService.new
-    coords = service.coordinates_by_location(location)
+    google_service = GoogleService.new
+    coords = google_service.coordinates_by_location(location)
 
-    amypode_conn = Faraday.new(url: "http://amypode.herokuapp.com") do |f|
-      f.headers["api_key"] = ENV['AMY_API_KEY']
-      f.adapter Faraday.default_adapter
-    end
+    amypode_service = AmypodeService.new
+    amypode = amypode_service.antipode_by_coordinates(coords)
 
-    amypode_response = amypode_conn.get("/api/v1/antipodes?lat=#{coords[:lat]}&long=#{coords[:lng]}")
-    antipode_data = JSON.parse(amypode_response.body, symbolize_names: true)[:data][:attributes]
-    # binding.pry
-    antipode_lat = antipode_data[:lat]
-    antipode_long = antipode_data[:long]
+    reverse_service = ReverseService.new
+    reverse = reverse_service.coordinates_by_antipode(amypode)
 
-    reverse_conn = Faraday.new(url: "https://maps.googleapis.com/maps/api/geocode/json") do |f|
-      f.adapter Faraday.default_adapter
-    end
-
-    reverse_response = reverse_conn.get("?latlng=#{antipode_lat},#{antipode_long}&key=#{ENV['API_KEY']}")
-    reverse_data = JSON.parse(reverse_response.body, symbolize_names: true)[:results][0][:geometry][:location]
-    reverse_lat = reverse_data[:lat]
-    reverse_long = reverse_data[:lng]
-
-    darksky_conn = Faraday.new(url: "https://api.darksky.net") do |f|
-      f.adapter Faraday.default_adapter
-    end
-
-    darksky_response = darksky_conn.get("/forecast/#{ENV['DS_KEY']}/#{reverse_lat},#{reverse_long}")
-    forecast_data = JSON.parse(darksky_response.body, symbolize_names: true)
-  end
-
-  def get_coordinates
-
+    dark_service = DarkService.new
+    antipode_forecast = dark_service.forecast_by_coordinates(reverse)
   end
 
   def antipode_forecast
