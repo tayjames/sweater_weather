@@ -11,29 +11,11 @@ class ForecastFacade
   end
 
   def get_forecast(location)
-    # service = GoogleService.new
-    # service.coordinates_by_location(location).map do |location_data|
-    #   Coordinate.new(location_data)
-    # end
+    google_service = GoogleService.new
+    coords = google_service.coordinates_by_location(location)
 
-
-    google_conn = Faraday.new(url: "https://maps.googleapis.com/maps/api/geocode/json?") do |f|
-      f.adapter Faraday.default_adapter
-    end
-
-    google_response = google_conn.get("?address=#{@location}&key=#{ENV['API_KEY']}")
-
-    coordinate_data = JSON.parse(google_response.body, symbolize_names: true)[:results]
-
-    latitude = coordinate_data[0][:geometry][:location][:lat]
-    longitude = coordinate_data[0][:geometry][:location][:lng]
-
-    darksky_conn = Faraday.new(url: "https://api.darksky.net") do |f|
-      f.adapter Faraday.default_adapter
-    end
-
-    darksky_response = darksky_conn.get("/forecast/#{ENV['DS_KEY']}/#{latitude},#{longitude}")
-    forecast_data = JSON.parse(darksky_response.body, symbolize_names: true)
+    darksky_service = DarkService.new
+    forecast = darksky_service.forecast_by_coordinates(coords)
   end
 
   def current_forecast
