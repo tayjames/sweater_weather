@@ -3,7 +3,7 @@ class CurrentForecast
 
   def initialize(attributes)
     @icon = attributes[:icon]
-    @temperature = attributes[:tempurature]
+    @temperature = attributes[:temperature]
     @feels_like = attributes[:apparentTemperature]
     @humidity = attributes[:humidity]
     @visibility = attributes[:visibility]
